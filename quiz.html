@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест: Подходит ли тебе эта профессия?</title>
+    <!-- Подключаем тот же шрифт -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ===== БАЗОВЫЕ СТИЛИ (из основного сайта) ===== */
+        :root {
+            --orange: #FF5C00;
+            --orange-dark: #E04E00;
+            --bg-dark: #0D0D0D;
+            --bg-card: #1A1A1A;
+            --text-white: #FFFFFF;
+            --text-gray: #999999;
+            --border-color: #333333;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-white);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Кнопка "Назад" в хедере */
+        .header {
+            padding: 20px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .back-link {
+            color: var(--text-gray);
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: color 0.3s;
+        }
+        .back-link:hover { color: var(--text-white); }
+
+        /* ===== КОНТЕЙНЕР ТЕСТА ===== */
+        .quiz-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .quiz-container {
+            width: 100%;
+            max-width: 700px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            padding: 50px;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        /* Прогресс бар */
+        .progress-header {
+            margin-bottom: 40px;
+        }
+        
+        .progress-text {
+            font-size: 14px;
+            color: var(--text-gray);
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 6px;
+            background: #333;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--orange);
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        /* Вопросы */
+        .question-block {
+            display: none; /* Скрываем по умолчанию */
+            animation: fadeIn 0.5s ease;
+        }
+
+        .question-block.active {
+            display: block;
+        }
+
+        .question-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            line-height: 1.3;
+        }
+
+        /* Варианты ответов */
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-white);
+            padding: 20px 25px;
+            border-radius: 16px;
+            text-align: left;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .option-btn:hover {
+            border-color: var(--orange);
+            background: rgba(255, 92, 0, 0.05);
+        }
+
+        .option-btn.selected {
+            background: var(--orange);
+            border-color: var(--orange);
+            color: white;
+            font-weight: 600;
+        }
+
+        /* Результаты */
+        .result-block {
+            display: none;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .result-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .result-title {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: var(--orange);
+        }
+
+        .result-desc {
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--text-light-gray);
+            margin-bottom: 40px;
+        }
+
+        .restart-btn {
+            background: white;
+            color: black;
+            border: none;
+            padding: 16px 40px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .restart-btn:hover {
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Адаптив */
+        @media (max-width: 768px) {
+            .quiz-container { padding: 30px 20px; border-radius: 20px; }
+            .question-title { font-size: 22px; }
+            .header { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Хедер с кнопкой назад -->
+    <header class="header">
+        <a href="index.html" class="back-link">← Вернуться на главную</a>
+        <div style="font-size: 14px; color: #666;">Designe by PELMESHKI</div>
+    </header>
+
+    <div class="quiz-wrapper">
+        <div class="quiz-container">
+            
+            <!-- Блок прогресса -->
+            <div class="progress-header" id="progressHeader">
+                <span class="progress-text" id="progressText">Вопрос 1 из 5</span>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progressBar"></div>
+                </div>
+            </div>
+
+            <!-- Контейнер для вопросов -->
+            <div id="quizContent">
+                <!-- Вопросы будут генерироваться здесь через JS -->
+            </div>
+
+            <!-- Блок результатов (скрыт по умолчанию) -->
+            <div class="result-block" id="resultBlock">
+                <span class="result-icon" id="resultIcon">🚀</span>
+                <h2 class="result-title" id="resultTitle">Заголовок</h2>
+                <p class="result-desc" id="resultDesc">Описание результата</p>
+                <button class="restart-btn" onclick="restartQuiz()">Пройти заново</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Данные вопросов
+        const questions = [
+            {
+                question: "Как ты решаешь сложные проблемы?",
+                options: [
+                    { text: "Разбираю на части, ищу причину и системное решение", score: 2 },
+                    { text: "Делаю быстро интуитивно, чтобы просто закрыть задачу", score: 0 },
+                    { text: "Сразу прошу помощи у кого-то более опытного", score: 1 }
+                ]
+            },
+            {
+                question: "Что тебя больше драйвит в работе?",
+                options: [
+                    { text: "Понимание того, как продукт влияет на бизнес и людей", score: 2 },
+                    { text: "Красивый код и чистая архитектура", score: 1 }, // Для фронтендера это ок, но для ПМа меньше
+                    { text: "Четкое следование инструкциям и ТЗ", score: 0 }
+                ]
+            },
+            {
+                question: "Как ты относишься к неопределенности?",
+                options: [
+                    { text: "Нормально, если есть данные для анализа", score: 2 },
+                    { text: "Люблю, когда всё понятно и расписано заранее", score: 0 },
+                    { text: "Стараюсь избегать ситуаций без четких правил", score: 0 }
+                ]
+            },
+            {
+                question: "Тебе нужно объяснить сложную идею команде. Твои действия?",
+                options: [
+                    { text: "Подберу аргументы для каждого: бизнесу — про деньги, devs — про технику", score: 2 },
+                    { text: "Напишу длинное техническое задание и отправлю в чат", score: 0 },
+                    { text: "Расскажу только самую суть, детали обсудим потом", score: 1 }
+                ]
+            },
+            {
+                question: "Пользователи жалуются на новую фичу. Что сделаешь?",
+                options: [
+                    { text: "Проанализирую метрики, поговорю с пользователями и найду причину", score: 2 },
+                    { text: "Скажу разработчикам срочно всё исправить", score: 0 },
+                    { text: "Проигнорирую, пока не станет массовым", score: 0 }
+                ]
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let totalScore = 0;
+
+        const quizContent = document.getElementById('quizContent');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const progressHeader = document.getElementById('progressHeader');
+        const resultBlock = document.getElementById('resultBlock');
+
+        // Инициализация
+        function initQuiz() {
+            renderQuestion();
+            updateProgress();
+        }
+
+        // Рендер текущего вопроса
+        function renderQuestion() {
+            const q = questions[currentQuestionIndex];
+            
+            // Очищаем контент
+            quizContent.innerHTML = '';
+
+            // Создаем блок вопроса
+            const qBlock = document.createElement('div');
+            qBlock.className = 'question-block active';
+            
+            const title = document.createElement('h2');
+            title.className = 'question-title';
+            title.innerText = q.question;
+            
+            const optionsDiv = document.createElement('div');
+            optionsDiv.className = 'options-list';
+
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt.text;
+                btn.onclick = () => handleAnswer(opt.score, btn);
+                optionsDiv.appendChild(btn);
+            });
+
+            qBlock.appendChild(title);
+            qBlock.appendChild(optionsDiv);
+            quizContent.appendChild(qBlock);
+        }
+
+        // Обработка ответа
+        function handleAnswer(score, btnElement) {
+            // Визуальный эффект выбора
+            const allBtns = document.querySelectorAll('.option-btn');
+            allBtns.forEach(b => b.classList.remove('selected'));
+            btnElement.classList.add('selected');
+
+            totalScore += score;
+
+            // Небольшая задержка перед следующим вопросом
+            setTimeout(() => {
+                currentQuestionIndex++;
+                
+                if (currentQuestionIndex < questions.length) {
+                    renderQuestion();
+                    updateProgress();
+                } else {
+                    showResults();
+                }
+            }, 300);
+        }
+
+        // Обновление прогресс бара
+        function updateProgress() {
+            const percent = ((currentQuestionIndex) / questions.length) * 100;
+            progressBar.style.width = percent + '%';
+            progressText.innerText = `Вопрос ${currentQuestionIndex + 1} из ${questions.length}`;
+        }
+
+        // Показ результатов
+        function showResults() {
+            quizContent.style.display = 'none';
+            progressHeader.style.display = 'none';
+            resultBlock.style.display = 'block';
+
+            const titleEl = document.getElementById('resultTitle');
+            const descEl = document.getElementById('resultDesc');
+            const iconEl = document.getElementById('resultIcon');
+
+            // Логика результатов (максимум 10 баллов)
+            if (totalScore >= 8) {
+                iconEl.innerText = "🔥";
+                titleEl.innerText = "Ты прирожденный Product Manager!";
+                descEl.innerText = "У тебя отличное системное мышление, ты умеешь работать с данными и находить баланс между бизнесом и пользователями. Эта профессия создана для тебя.";
+            } else if (totalScore >= 5) {
+                iconEl.innerText = "🤔";
+                titleEl.innerText = "Есть потенциал, но нужно учиться";
+                descEl.innerText = "У тебя есть хорошие задатки, но в некоторых ситуациях ты действуешь слишком импульсивно или пассивно. Попробуй подтянуть навыки аналитики и коммуникации.";
+            } else {
+                iconEl.innerText = "💻";
+                titleEl.innerText = "Возможно, тебе ближе другая роль?";
+                descEl.innerText = "Твои ответы показывают, что ты предпочитаешь четкие задачи и исполнение, а не управление неопределенностью. Возможно, тебе стоит посмотреть в сторону разработки или дизайна.";
+            }
+        }
+
+        // Перезапуск
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            totalScore = 0;
+            resultBlock.style.display = 'none';
+            quizContent.style.display = 'block';
+            progressHeader.style.display = 'block';
+            initQuiz();
+        }
+
+        // Запуск при загрузке
+        initQuiz();
+
+    </script>
+</body>
+</html>

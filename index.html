@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Manager Portfolio</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --orange: #FF5C00;
+            --orange-dark: #E04E00;
+            --bg-dark: #0D0D0D;
+            --bg-card: #1A1A1A;
+            --text-white: #FFFFFF;
+            --text-gray: #999999;
+            --text-light-gray: #CCCCCC;
+            --border-color: #333333;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-white);
+            overflow-x: hidden;
+        }
+
+        /* HEADER */
+        .header {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            padding: 20px 60px; display: flex; justify-content: space-between; align-items: center;
+            background: linear-gradient(180deg, rgba(13,13,13,0.9) 0%, transparent 100%);
+        }
+        .header-logo { font-size: 14px; color: var(--text-gray); letter-spacing: 1px; }
+        .header-logo span { display: block; font-size: 11px; color: #666; }
+        .header-nav { display: flex; gap: 40px; align-items: center; }
+        .header-nav a { color: var(--text-gray); text-decoration: none; font-size: 14px; transition: color 0.3s; }
+        .header-nav a:hover { color: var(--text-white); }
+        
+        .btn-test {
+            background: var(--orange); color: white; border: none; padding: 12px 28px;
+            border-radius: 30px; font-size: 14px; font-weight: 600; cursor: pointer;
+            display: flex; align-items: center; gap: 8px; transition: background 0.3s; text-decoration: none;
+        }
+        .btn-test:hover { background: var(--orange-dark); }
+        .btn-test .arrow {
+            width: 24px; height: 24px; background: white; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; color: var(--orange); font-size: 14px;
+        }
+
+        /* HERO */
+        .hero {
+            position: relative; min-height: 100vh; display: flex; align-items: center;
+            padding: 120px 60px 80px; overflow: hidden;
+        }
+        .hero-bg {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, #FF5C00 0%, #CC3300 30%, #1a0a00 60%, #0D0D0D 100%); z-index: 0;
+        }
+        .hero-bg::after {
+            content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 200px;
+            background: linear-gradient(transparent, var(--bg-dark));
+        }
+        .hero-content {
+            position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; width: 100%;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .hero-text { max-width: 600px; }
+        .hero-text .greeting { font-size: 18px; color: rgba(255,255,255,0.7); margin-bottom: 10px; }
+        .hero-text h1 { font-size: 80px; font-weight: 900; line-height: 1; margin-bottom: 30px; }
+        .hero-description { max-width: 400px; margin-left: auto; }
+        .hero-description p { font-size: 16px; line-height: 1.6; color: rgba(255,255,255,0.8); margin-bottom: 10px; }
+        .hero-description .quote { font-size: 14px; color: rgba(255,255,255,0.5); font-style: italic; }
+
+        .hero-stats {
+            position: relative; z-index: 1; display: flex; gap: 60px; padding: 40px 60px;
+            max-width: 1400px; margin: 0 auto;
+        }
+        .hero-stat { text-align: center; }
+        .hero-stat .number { font-size: 36px; font-weight: 800; color: var(--orange); }
+        .hero-stat .label { font-size: 13px; color: var(--text-gray); margin-top: 5px; }
+
+        /* PIXELS SECTION -> PRODUCT VISION */
+        .pixels-section { padding: 100px 60px; max-width: 1400px; margin: 0 auto; }
+        .pixels-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 60px; }
+        .pixels-header .subtitle { color: var(--orange); font-size: 16px; margin-bottom: 15px; }
+        .pixels-header h2 { font-size: 48px; font-weight: 800; line-height: 1.1; max-width: 500px; }
+        .pixels-header .description { max-width: 450px; font-size: 15px; line-height: 1.7; color: var(--text-light-gray); }
+        
+        .btn-orange {
+            background: var(--orange); color: white; border: none; padding: 14px 32px;
+            border-radius: 30px; font-size: 14px; font-weight: 600; cursor: pointer;
+            display: inline-flex; align-items: center; gap: 10px; margin-top: 20px;
+            transition: background 0.3s; text-decoration: none;
+        }
+        .btn-orange:hover { background: var(--orange-dark); }
+        .btn-orange .circle {
+            width: 24px; height: 24px; background: white; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; color: var(--orange); font-size: 12px;
+        }
+
+        .pixels-images { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 60px; }
+        .pixels-images img { width: 100%; height: 300px; object-fit: cover; border-radius: 20px; filter: grayscale(100%); }
+        .pixels-label { text-align: center; font-size: 24px; font-weight: 300; color: var(--text-light-gray); }
+
+        /* STEP BY STEP */
+        .steps-section { padding: 100px 60px; background: white; border-radius: 40px 40px 0 0; color: #111; }
+        .steps-section .subtitle { color: var(--orange); font-size: 16px; margin-bottom: 15px; }
+        .steps-section h2 { font-size: 42px; font-weight: 800; margin-bottom: 20px; color: #111; }
+        .steps-section .description { font-size: 15px; line-height: 1.7; color: #555; max-width: 700px; margin-bottom: 60px; }
+        
+        .steps-list { display: flex; flex-direction: column; gap: 30px; max-width: 1000px; }
+        .step-item {
+            display: flex; align-items: center; gap: 30px; padding: 20px 0;
+            border-left: 3px solid var(--orange); padding-left: 30px;
+        }
+        .step-item .step-number { font-size: 48px; font-weight: 900; color: #111; min-width: 80px; }
+        .step-item .step-title { font-size: 24px; font-weight: 700; min-width: 250px; }
+        .step-item .step-desc { font-size: 14px; color: #666; line-height: 1.6; max-width: 400px; }
+
+        /* HARD SKILLS */
+        .skills-section { padding: 100px 60px; position: relative; overflow: hidden; }
+        .skills-bg { position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; }
+        .skills-bg img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.3) grayscale(100%); }
+        .skills-content { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; }
+        .skills-content .subtitle { color: var(--orange); font-size: 16px; margin-bottom: 15px; }
+        .skills-content h2 { font-size: 36px; font-weight: 800; margin-bottom: 20px; max-width: 700px; line-height: 1.3; }
+        .skills-content .description { font-size: 15px; line-height: 1.7; color: var(--text-light-gray); max-width: 700px; margin-bottom: 50px; }
+        
+        .skills-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .skill-card {
+            background: rgba(30, 30, 30, 0.9); border: 1px solid var(--border-color);
+            border-radius: 20px; padding: 30px; backdrop-filter: blur(10px);
+        }
+        .skill-card h4 { font-size: 16px; font-weight: 700; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); }
+        .skill-card p { font-size: 14px; line-height: 1.7; color: var(--text-gray); }
+
+        /* SALARY */
+        .salary-section { padding: 100px 60px; background: white; border-radius: 40px 40px 0 0; color: #111; }
+        .salary-section .subtitle { color: var(--orange); font-size: 16px; margin-bottom: 15px; }
+        .salary-section h2 { font-size: 42px; font-weight: 800; margin-bottom: 20px; color: #111; }
+        .salary-section .description { font-size: 15px; line-height: 1.7; color: #555; max-width: 700px; margin-bottom: 50px; }
+        
+        .salary-cards { display: flex; flex-direction: column; gap: 25px; max-width: 900px; }
+        .salary-card { background: var(--bg-dark); border-radius: 24px; padding: 40px; color: white; }
+        .salary-card .level { font-size: 14px; font-weight: 600; color: var(--text-gray); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+        .salary-card .amount { font-size: 42px; font-weight: 900; margin-bottom: 10px; }
+        .salary-card .amount-desc { font-size: 13px; color: var(--text-gray); margin-bottom: 25px; }
+        .salary-card ul { list-style: none; margin-bottom: 30px; }
+        .salary-card ul li { font-size: 14px; color: var(--text-light-gray); padding: 6px 0; padding-left: 20px; position: relative; }
+        .salary-card ul li::before { content: '•'; position: absolute; left: 0; color: var(--orange); }
+        
+        .btn-white {
+            background: white; color: #111; border: none; padding: 16px 32px; border-radius: 30px;
+            font-size: 15px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center;
+            gap: 10px; width: 100%; justify-content: center; transition: background 0.3s;
+        }
+        .btn-white:hover { background: #eee; }
+        .btn-white .circle-orange {
+            width: 28px; height: 28px; background: var(--orange); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; color: white; font-size: 14px;
+        }
+
+        /* SOFT SKILLS */
+        .soft-skills-section { padding: 100px 60px; position: relative; }
+        .soft-skills-bg { position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; }
+        .soft-skills-bg img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.25) grayscale(100%); }
+        .soft-skills-content { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; }
+        .soft-skills-content .subtitle { color: var(--orange); font-size: 16px; margin-bottom: 15px; }
+        .soft-skills-content h2 { font-size: 36px; font-weight: 800; margin-bottom: 20px; max-width: 700px; line-height: 1.3; }
+        .soft-skills-content .description { font-size: 15px; line-height: 1.7; color: var(--text-light-gray); max-width: 700px; margin-bottom: 50px; }
+
+        /* ROADMAP */
+        .roadmap-section { padding: 80px 60px; max-width: 1400px; margin: 0 auto; }
+        .roadmap-grid { display: flex; flex-direction: column; gap: 15px; }
+        .roadmap-item {
+            display: grid; grid-template-columns: 200px 1fr 1fr 200px; gap: 20px;
+            padding: 25px 30px; background: var(--bg-card); border-radius: 16px; align-items: start;
+        }
+        .roadmap-item .rm-number { display: flex; align-items: center; gap: 12px; }
+        .roadmap-item .rm-number .num {
+            width: 36px; height: 36px; background: var(--orange); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px;
+        }
+        .roadmap-item .rm-title { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+        .roadmap-item .rm-duration { font-size: 12px; color: var(--text-gray); }
+        .roadmap-item .rm-desc { font-size: 14px; color: var(--text-light-gray); line-height: 1.5; }
+        .roadmap-item .rm-actions h5 { font-size: 13px; color: var(--orange); margin-bottom: 8px; }
+        .roadmap-item .rm-actions ul { list-style: none; }
+        .roadmap-item .rm-actions ul li { font-size: 13px; color: var(--text-light-gray); padding: 3px 0; padding-left: 15px; position: relative; }
+        .roadmap-item .rm-actions ul li::before { content: '•'; position: absolute; left: 0; color: var(--text-gray); }
+        .roadmap-item .rm-result h5 { font-size: 13px; color: var(--orange); margin-bottom: 8px; }
+        .roadmap-item .rm-result p { font-size: 13px; color: var(--text-light-gray); line-height: 1.5; }
+
+        /* TIME SECTION */
+        .time-section { padding: 60px; max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .time-image { position: relative; border-radius: 24px; overflow: hidden; height: 400px; }
+        .time-image img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%) brightness(0.5); }
+        .time-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+        .time-overlay .time { font-size: 72px; font-weight: 900; border: 2px solid var(--orange); padding: 10px 30px; border-radius: 12px; }
+        .time-nav { display: flex; gap: 15px; justify-content: center; margin-top: 20px; }
+        .time-nav button {
+            width: 44px; height: 44px; border-radius: 50%; border: 2px solid white; background: transparent;
+            color: white; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s;
+        }
+        .time-nav button:hover { background: white; color: var(--bg-dark); }
+        .time-nav button.active { background: var(--orange); border-color: var(--orange); }
+        
+        .time-card {
+            background: linear-gradient(135deg, var(--orange) 0%, #CC3300 100%); border-radius: 24px;
+            padding: 40px; position: relative; display: flex; flex-direction: column; justify-content: space-between; min-height: 400px;
+        }
+        .time-card .card-image {
+            position: absolute; top: -20px; right: 30px; width: 120px; height: 120px;
+            background: #333; border-radius: 16px; border: 3px solid white; transform: rotate(15deg);
+        }
+        .time-card p { font-size: 15px; line-height: 1.7; max-width: 350px; position: relative; z-index: 1; }
+        .time-card .brain {
+            position: absolute; bottom: -30px; right: 30px; width: 150px; height: 150px;
+            background: #222; border-radius: 50%; border: 3px solid white;
+        }
+
+        /* FAQ */
+        .faq-section { padding: 100px 60px; background: white; border-radius: 40px 40px 0 0; color: #111; }
+        .faq-section .subtitle { color: var(--orange); font-size: 16px; margin-bottom: 15px; }
+        .faq-section h2 { font-size: 42px; font-weight: 800; margin-bottom: 10px; color: #111; }
+        .faq-section .description { font-size: 14px; color: #777; margin-bottom: 50px; max-width: 500px; }
+        .faq-list { max-width: 800px; }
+        .faq-item { border-bottom: 1px solid #eee; padding: 25px 0; cursor: pointer; }
+        .faq-item h4 { font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 15px; }
+        .faq-item h4::before { content: '+'; font-size: 22px; font-weight: 300; color: var(--orange); }
+
+        /* FOOTER */
+        .footer { padding: 80px 60px; background: var(--bg-dark); }
+        .footer-content { max-width: 1400px; margin: 0 auto; }
+        .footer-quote { font-size: 24px; font-weight: 700; margin-bottom: 10px; max-width: 500px; }
+        .footer-subquote { font-size: 14px; color: var(--text-gray); margin-bottom: 30px; }
+        .footer .btn-test { margin-bottom: 60px; }
+        .footer-brand { font-size: 48px; font-weight: 900; color: #222; line-height: 1.1; }
+        .footer-brand span { display: block; font-size: 14px; font-weight: 400; color: #444; margin-bottom: 5px; }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .hero-text h1 { font-size: 56px; }
+            .pixels-header h2, .steps-section h2, .salary-section h2, .faq-section h2 { font-size: 32px; }
+            .roadmap-item { grid-template-columns: 1fr; }
+            .time-section { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .header { padding: 15px 20px; }
+            .header-nav { display: none; }
+            .hero { padding: 100px 20px 60px; }
+            .hero-text h1 { font-size: 40px; }
+            .hero-stats { flex-wrap: wrap; gap: 30px; padding: 20px; }
+            .pixels-section, .steps-section, .skills-section, .salary-section, 
+            .soft-skills-section, .roadmap-section, .time-section, .faq-section, .footer { padding-left: 20px; padding-right: 20px; }
+            .pixels-images { grid-template-columns: 1fr; }
+            .skills-grid { grid-template-columns: 1fr; }
+            .step-item { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-logo">
+            Designe by
+            <span>PELMESHKI</span>
+        </div>
+        <nav class="header-nav">
+            <a href="#steps">Процесс</a>
+            <a href="#skills">Навыки</a>
+            <a href="#salary">Зарплаты</a>
+            <a href="#faq">FAQ</a>
+            <a href="quiz.html" class="btn-test">
+                Пройди Тест
+                <span class="arrow">→</span>
+            </a>
+        </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <p class="greeting">Привет, я</p>
+                <h1>Product<br>Manager</h1>
+            </div>
+            <div class="hero-description">
+                <p>Хороший продукт — тот, который решает реальную проблему пользователя.</p>
+                <p class="quote">Я превращаю бизнес-идеи в работающие цифровые решения, которые приносят прибыль.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- HERO STATS -->
+    <div class="hero-stats">
+        <div class="hero-stat">
+            <div class="number">1</div>
+            <div class="label">Discovery</div>
+        </div>
+        <div class="hero-stat">
+            <div class="number">2</div>
+            <div class="label">Unit Economics</div>
+        </div>
+        <div class="hero-stat">
+            <div class="number">3</div>
+            <div class="label">Roadmapping</div>
+        </div>
+        <div class="hero-stat">
+            <div class="number">4</div>
+            <div class="label">Stakeholder Mgmt</div>
+        </div>
+    </div>
+
+    <!-- PRODUCT VISION SECTION -->
+    <section class="pixels-section">
+        <div class="pixels-header">
+            <div>
+                <p class="subtitle">Управляю Продуктом</p>
+                <h2>Создаю Ценность,<br>Которая Работает На Бизнес</h2>
+            </div>
+            <div class="description">
+                <p>Я нахожу баланс между потребностями пользователей, возможностями технологий и целями бизнеса. Моя задача — сделать так, чтобы каждая фича приносила измеримую пользу.</p>
+                <a href="quiz.html" class="btn-orange">
+                    Подходит ли тебе эта роль?
+                    <span class="circle">→</span>
+                </a>
+            </div>
+        </div>
+        <div class="pixels-images">
+            <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=400&fit=crop" alt="Team Meeting">
+            <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=600&h=400&fit=crop" alt="Strategy">
+            <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&h=400&fit=crop" alt="Analytics">
+        </div>
+        <p class="pixels-label">Heart of the Business</p>
+    </section>
+
+    <!-- STEP BY STEP -->
+    <section class="steps-section" id="steps">
+        <p class="subtitle">Процесс работы</p>
+        <h2>Как я создаю продукты.</h2>
+        <p class="description">От исследования проблемы до запуска фичи и анализа метрик — вот как устроен цикл управления продуктом.</p>
+
+        <div class="steps-list">
+            <div class="step-item">
+                <span class="step-number">01</span>
+                <span class="step-title">Исследование (Discovery)</span>
+                <span class="step-desc">CustDev, анализ рынка и конкурентов. Поиск болей пользователей и формулировка гипотез для проверки.</span>
+            </div>
+            <div class="step-item">
+                <span class="step-number">02</span>
+                <span class="step-title">Приоритизация</span>
+                <span class="step-desc">Оценка гипотез по RICE/ICE. Формирование бэклога и согласование роадмапа с командой и стейкхолдерами.</span>
+            </div>
+            <div class="step-item">
+                <span class="step-number">03</span>
+                <span class="step-title">Проработка требований</span>
+                <span class="step-desc">Написание User Stories, критериев приемки (AC). Работа с дизайнерами над прототипами и UX.</span>
+            </div>
+            <div class="step-item">
+                <span class="step-number">04</span>
+                <span class="step-title">Запуск и Delivery</span>
+                <span class="step-desc">Сопровождение разработки, приемка результатов, организация релиза и коммуникация с пользователями.</span>
+            </div>
+            <div class="step-item">
+                <span class="step-number">05</span>
+                <span class="step-title">Анализ метрик</span>
+                <span class="step-desc">Оценка влияния фичи на ключевые показатели (Retention, Revenue). Принятие решений о дальнейших шагах.</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- HARD SKILLS -->
+    <section class="skills-section" id="skills">
+        <div class="skills-bg">
+            <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?w=1400&h=800&fit=crop" alt="Skills Background">
+        </div>
+        <div class="skills-content">
+            <p class="subtitle">Hard Skills</p>
+            <h2>Инструменты и методы, которые помогают мне принимать взвешенные продуктовые решения.</h2>
+            <p class="description">Мой набор навыков позволяет работать на стыке бизнеса, технологий и пользовательского опыта.</p>
+
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <h4>Unit-экономика и Аналитика</h4>
+                    <p>Расчет LTV, CAC, ROI. Работа с Amplitude, Mixpanel, SQL. Умение считать деньги продукта и находить точки роста через данные.</p>
+                </div>
+                <div class="skill-card">
+                    <h4>CustDev и Исследования</h4>
+                    <p>Проведение глубинных интервью, CJM, Jobs To Be Done. Умение слышать пользователя и отделять факты от мнений.</p>
+                </div>
+                <div class="skill-card">
+                    <h4>Фреймворки приоритизации</h4>
+                    <p>RICE, ICE, WSJF, Kano. Умение сказать "нет" хорошим идеям ради лучших, опираясь на влияние на бизнес-метрики.</p>
+                </div>
+                <div class="skill-card">
+                    <h4>Техническая грамотность</h4>
+                    <p>Понимание архитектуры, API, баз данных. Способность говорить с разработчиками на одном языке и оценивать сложность задач.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SALARY -->
+    <section class="salary-section" id="salary">
+        <p class="subtitle">Зарплаты</p>
+        <h2>Сколько зарабатывает PM?</h2>
+        <p class="description">От ассистента продакта до Head of Product. Доход растет вместе с ответственностью за P&L и стратегию.</p>
+
+        <div class="salary-cards">
+            <div class="salary-card">
+                <div class="level">Junior PM / APM</div>
+                <div class="amount">80 000 – 120 000 ₽ / mo</div>
+                <div class="amount-desc">Начинающий специалист. Помогает старшим коллегам, ведет небольшие задачи и фичи.</div>
+                <ul>
+                    <li>Базовое понимание метрик и юнит-экономики</li>
+                    <li>Умение проводить CustDev и интервью</li>
+                    <li>Написание понятных User Stories</li>
+                    <li>Работа с Jira/Notion и ведение документации</li>
+                </ul>
+                <button class="btn-white">
+                    Смотреть вакансии Junior
+                    <span class="circle-orange">→</span>
+                </button>
+            </div>
+
+            <div class="salary-card">
+                <div class="level">Middle PM</div>
+                <div class="amount">180 000 – 280 000 ₽ / mo</div>
+                <div class="amount-desc">Самостоятельный менеджер. Отвечает за конкретный продукт или направление, влияет на выручку.</div>
+                <ul>
+                    <li>Глубокое знание метрик (North Star, Retention)</li>
+                    <li>Управление бэклогом и роадмапом команды</li>
+                    <li>Проведение A/B тестов и анализ результатов</li>
+                    <li>Взаимодействие со смежными командами</li>
+                </ul>
+                <button class="btn-white">
+                    Смотреть вакансии Middle
+                    <span class="circle-orange">→</span>
+                </button>
+            </div>
+
+            <div class="salary-card">
+                <div class="level">Senior / Group PM</div>
+                <div class="amount">350 000 – 500 000+ ₽ / mo</div>
+                <div class="amount-desc">Стратегический уровень. Отвечает за портфель продуктов, развивает команду и определяет видение.</div>
+                <ul>
+                    <li>Формирование продуктовой стратегии компании</li>
+                    <li>Управление P&L (прибылями и убытками)</li>
+                    <li>Менторство джуниоров и мидлов</li>
+                    <li>Выстраивание процессов Product Discovery</li>
+                </ul>
+                <button class="btn-white">
+                    Смотреть вакансии Senior
+                    <span class="circle-orange">→</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOFT SKILLS -->
+    <section class="soft-skills-section">
+        <div class="soft-skills-bg">
+            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1400&h=800&fit=crop" alt="Soft Skills Background">
+        </div>
+        <div class="soft-skills-content">
+            <p class="subtitle">Soft Skills</p>
+            <h2>Продакт — это про людей. Без этих навыков хард-скиллы не работают.</h2>
+            <p class="description">Умение договариваться, вдохновлять и принимать сложные решения важнее знания конкретных инструментов.</p>
+
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <h4>Коммуникация и Стейкхолдинг</h4>
+                    <p>Умение "продавать" идеи команде и бизнесу. Управление ожиданиями, прозрачная отчетность и разрешение конфликтов интересов.</p>
+                </div>
+                <div class="skill-card">
+                    <h4>Эмпатия и Клиентоцентричность</h4>
+                    <p>Способность поставить себя на место пользователя. Понимание его болей, мотиваций и контекста использования продукта.</p>
+                </div>
+                <div class="skill-card">
+                    <h4>Лидерство без полномочий</h4>
+                    <p>Умение вести за собой команду разработки, дизайна и аналитики, даже если вы не их прямой руководитель.</p>
+                </div>
+                <div class="skill-card">
+                    <h4>Системное мышление</h4>
+                    <p>Видение картины целиком. Понимание того, как изменение одной метрики повлияет на другие части экосистемы продукта.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ROADMAP -->
+    <section class="roadmap-section">
+        <div class="roadmap-grid">
+            <div class="roadmap-item">
+                <div class="rm-number">
+                    <span class="num">1</span>
+                    <div>
+                        <div class="rm-title">Изучи базу</div>
+                        <div class="rm-duration">1–2 месяца</div>
+                    </div>
+                </div>
+                <div class="rm-desc">Пойми, кто такой продакт и чем он отличается от проектного менеджера.</div>
+                <div class="rm-actions">
+                    <h5>Что делать:</h5>
+                    <ul>
+                        <li>Прочитай "Inspired" Марти Кагана</li>
+                        <li>Изучи фреймворки (JTBD, Lean Startup)</li>
+                        <li>Посмотри лекции на YouTube (GoPractice, Product Sense)</li>
+                    </ul>
+                </div>
+                <div class="rm-result">
+                    <h5>Результат:</h5>
+                    <p>Понимание роли и словаря PM</p>
+                </div>
+            </div>
+
+            <div class="roadmap-item">
+                <div class="rm-number">
+                    <span class="num">2</span>
+                    <div>
+                        <div class="rm-title">Освой аналитику</div>
+                        <div class="rm-duration">1 месяц</div>
+                    </div>
+                </div>
+                <div class="rm-desc">Научись считать деньги и понимать поведение пользователей через цифры.</div>
+                <div class="rm-actions">
+                    <h5>Что делать:</h5>
+                    <ul>
+                        <li>Разберись с Unit-экономикой (LTV > 3xCAC)</li>
+                        <li>Освой SQL на базовом уровне</li>
+                        <li>Изучи когортный анализ и воронки</li>
+                    </ul>
+                </div>
+                <div class="rm-result">
+                    <h5>Результат:</h5>
+                    <p>Умение обосновывать решения цифрами</p>
+                </div>
+            </div>
+
+            <div class="roadmap-item">
+                <div class="rm-number">
+                    <span class="num">3</span>
+                    <div>
+                        <div class="rm-title">Практика (Pet-project)</div>
+                        <div class="rm-duration">2–3 месяца</div>
+                    </div>
+                </div>
+                <div class="rm-desc">Попробуй запустить свой микро-продукт или улучшить существующий сервис.</div>
+                <div class="rm-actions">
+                    <h5>Что делать:</h5>
+                    <ul>
+                        <li>Проведи 10+ проблемных интервью</li>
+                        <li>Сделай прототип в Figma</li>
+                        <li>Запусти MVP и собери первые метрики</li>
+                    </ul>
+                </div>
+                <div class="rm-result">
+                    <h5>Результат:</h5>
+                    <p>Первый кейс в портфолио</p>
+                </div>
+            </div>
+
+            <div class="roadmap-item">
+                <div class="rm-number">
+                    <span class="num">4</span>
+                    <div>
+                        <div class="rm-title">Нетворкинг</div>
+                        <div class="rm-duration">Постоянно</div>
+                    </div>
+                </div>
+                <div class="rm-desc">Продуктовая тусовка очень важна для поиска работы и обмена опытом.</div>
+                <div class="rm-actions">
+                    <h5>Что делать:</h5>
+                    <ul>
+                        <li>Вступай в чаты PM (Telegram, Slack)</li>
+                        <li>Ходи на митапы и конференции</li>
+                        <li>Найди ментора из индустрии</li>
+                    </ul>
+                </div>
+                <div class="rm-result">
+                    <h5>Результат:</h5>
+                    <p>Рекомендации и скрытые вакансии</p>
+                </div>
+            </div>
+
+            <div class="roadmap-item">
+                <div class="rm-number">
+                    <span class="num">5</span>
+                    <div>
+                        <div class="rm-title">Упаковка опыта</div>
+                        <div class="rm-duration">2 недели</div>
+                    </div>
+                </div>
+                <div class="rm-desc">Оформи свои знания и проекты так, чтобы рекрутер понял твою ценность.</div>
+                <div class="rm-actions">
+                    <h5>Что делать:</h5>
+                    <ul>
+                        <li>Составь резюме через призму достижений (было/стало)</li>
+                        <li>Опиши кейсы по структуре STAR</li>
+                        <li>Подготовь самопрезентацию на 2 минуты</li>
+                    </ul>
+                </div>
+                <div class="rm-result">
+                    <h5>Результат:</h5>
+                    <p>Готовность к собеседованиям</p>
+                </div>
+            </div>
+
+            <div class="roadmap-item">
+                <div class="rm-number">
+                    <span class="num">6</span>
+                    <div>
+                        <div class="rm-title">Собеседования</div>
+                        <div class="rm-duration">1–3 месяца</div>
+                    </div>
+                </div>
+                <div class="rm-desc">Интервью на PM — это отдельный навык. Тренируйся решать продуктовые кейсы.</div>
+                <div class="rm-actions">
+                    <h5>Что делать:</h5>
+                    <ul>
+                        <li>Решай кейсы (Circles, HEART framework)</li>
+                        <li>Изучи компанию перед интервью</li>
+                        <li>Не бойся задавать вопросы бизнесу</li>
+                    </ul>
+                </div>
+                <div class="rm-result">
+                    <h5>Результат:</h5>
+                    <p>Оффер и начало карьеры</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TIME SECTION -->
+    <section class="time-section">
+        <div class="time-image">
+            <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=800&h=600&fit=crop" alt="Meeting at 10:00">
+            <div class="time-overlay">
+                <div class="time">10:00</div>
+                <div class="time-nav">
+                    <button>←</button>
+                    <button class="active">→</button>
+                </div>
+            </div>
+        </div>
+        <div class="time-card">
+            <div class="card-image"></div>
+            <p>Синхронизация с командой и стейкхолдерами. Обсуждение прогресса, блокеров и корректировка планов. Коммуникация занимает до 50% времени продакта.</p>
+            <div class="brain"></div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section" id="faq">
+        <p class="subtitle">Frequently Asked Questions</p>
+        <h2>Ответы на частые вопросы</h2>
+        <p class="description">Честно о входе в профессию, зарплатах и том, что реально делает продакт-менеджер.</p>
+
+        <div class="faq-list">
+            <div class="faq-item">
+                <h4>Нужно ли уметь программировать?</h4>
+            </div>
+            <div class="faq-item">
+                <h4>Чем PM отличается от Project Manager?</h4>
+            </div>
+            <div class="faq-item">
+                <h4>Можно ли стать PM без технического бэкграунда?</h4>
+            </div>
+            <div class="faq-item">
+                <h4>Какие книги читать новичку?</h4>
+            </div>
+            <div class="faq-item">
+                <h4>Реально ли войти в IT через стажировку?</h4>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-quote">Продукт — это не то, что мы делаем. Это то, как мы решаем проблемы людей.</p>
+            <p class="footer-subquote">Я помогаю бизнесу расти, создавая ценности для пользователей.</p>
+            <a href="quiz.html" class="btn-test">
+                Пройди Тест
+                <span class="arrow">→</span>
+            </a>
+            <div class="footer-brand">
+                <span>Designe by</span>
+                PELMESHKI
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
