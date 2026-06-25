@@ -1,4 +1,5 @@
 # 🚀 Product Manager Portfolio & Career Quiz
+https://selurin.github.io/ertelecom-pm/
 
 Лендинг-портфолио для профессии **Product Manager** с интерактивным тестом на профориентацию. Проект демонстрирует навыки верстки, работы с Vanilla JS и внимание к деталям UI/UX.
 
